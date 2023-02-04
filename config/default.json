@@ -1,0 +1,12 @@
+{
+  "JOB_KEYWORDS":[
+    "security",
+    "audit",
+    "injection"
+  ],
+  "SCAN_INTERVAL_MINUTES":30,
+  "TELEGRAM":{
+    "CHAT_ID":"-XXXXXXXXXX",
+    "TOKEN":"XXXXXXXXXX:XXXXXXXXXXXXXXXXXXXXXXXXX"
+  }
+}
