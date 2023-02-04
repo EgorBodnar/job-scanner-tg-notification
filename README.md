@@ -1,6 +1,6 @@
 # Job scanner with alert telegram notification
 
-## 📜Description: 
+## 📜 Description: 
 #### The scanner has a storage for previously viewed job posts to prevent duplicate notifications. It will only send notifications for new job postings.
 
 ## 🧰 Required settings and dependencies:
