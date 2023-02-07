@@ -13,10 +13,14 @@
     "job list"
   ],
   "license": "MIT",
+  "type":"module",
   "dependencies": {
     "axios": "^1.3.2",
     "cheerio": "^1.0.0-rc.12",
     "mongodb": "^5.0.0",
-    "telegraf": "^4.11.2"
+    "telegraf": "^4.11.2",
+    "puppeteer": "^19.6.3",
+    "fakebrowser": "^0.0.66",
+    "@faker-js/faker": "^7.6.0"
   }
 }

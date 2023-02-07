@@ -14,7 +14,8 @@ This means it operates independently of your technology stack and doesn't add an
 * Define the list of required keywords to match when parsing the job title in `JOB_KEYWORDS` `config/default.json`
 * Set Telegram bot token. `TELEGRAM.TOKEN` `config/default.json`| [**How to generate the TOKEN**](https://medium.com/geekculture/generate-telegram-token-for-bot-api-d26faf9bf064)
 * Set id of the Telegram chat to send job alerts to. `TELEGRAM.CHAT_ID` `config/default.json`| Don't forget to add the bot to this chat.
-* Extend the Job Sites list by the required ones in `config/jobSites.json`. Note: `jobTitleSelector` - css selector of the job post title. 
+* Extend the Job Sites list by the required ones in `config/jobSites.json`. Note: `jobTitleSelector` - css selector of the job post title.
+If there is some anti bot system except captcha, enable flag `antiBotCheck` and the Job Scanner will parse it anyway by FakeBrowser.
 * It scans sites each 30 minutes. The interval parameter could be configured in `SCAN_INTERVAL_MINUTES` `config/default.json`.
 
 ## ▶️ How to start the scanner:

@@ -1,8 +1,7 @@
-const fs = require('fs');
-const axios = require('axios');
-const cheerio = require('cheerio');
-const { Telegraf } = require('telegraf');
-const { MongoClient } = require('mongodb');
+import fs from 'fs';
+import { Telegraf } from 'telegraf';
+import { MongoClient } from 'mongodb';
+import { getJobTitlesByFakeBrowser, getJobTitlesByAxios }  from './jobTitleParser.js';
 
 const MONGODB_URI = 'mongodb://mongo:27017';
 
@@ -20,15 +19,17 @@ const parseJobSites = async () => {
 
   for (const site of jobSites) {
     try {
-      const response = await axios.get(site.url);
-      const html = response.data;
-      const $ = await cheerio.load(html);
-      const jobTitles = await $(site.jobTitleSelector);
+      let jobTitles = [];
+      if ( site.antiBotCheck ) {
+        jobTitles = await getJobTitlesByFakeBrowser(site)
+      } else {
+        jobTitles = await getJobTitlesByAxios(site)
+      }
 
       console.info(`Parsing ${site.name}'s job list`);
 
       for (let i = 0; i < jobTitles.length; i++) {
-        const jobTitle = $(jobTitles[i]).text().toLowerCase().trim();
+        const jobTitle = jobTitles[i].toLowerCase().trim()
 
         const isMatchingJob = config.JOB_KEYWORDS.some((keyword) =>
           jobTitle.includes(keyword)
