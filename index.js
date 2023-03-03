@@ -27,6 +27,11 @@ const parseJobSites = async () => {
       }
 
       console.info(`Parsing ${site.name}'s job list`);
+      if (jobTitles.length == 0) {
+        console.info(`          ===============================`);
+        console.info(`          ${site.name} has no job title`);
+        console.info(`          ===============================`);
+      }
 
       for (let i = 0; i < jobTitles.length; i++) {
         const jobTitle = jobTitles[i].toLowerCase().trim()
@@ -36,17 +41,17 @@ const parseJobSites = async () => {
         );
 
         if (isMatchingJob) {
-          console.info('Check if the job title has already been viewed');
+          console.info('          * Check if the job title has already been viewed');
           const isViewedJob = await viewedJobTitles.findOne({
             title: jobTitle,
             site: site.url,
           });
           if (!isViewedJob) {
-            const message = `New ${jobTitle.toUpperCase()} job found on ${site.name}: ${site.url}`;
+            const message = `          New ${jobTitle.toUpperCase()} job found on ${site.name}: ${site.url}`;
             console.info(message);
-            console.info('Sending data to Telegram chanel');
+            console.info('                    Sending data to Telegram chanel');
             await telegramBot.telegram.sendMessage(config.TELEGRAM.CHAT_ID, message);
-            console.info('Insert data to DB as viewed job title');
+            console.info('                    Insert data to DB as viewed job title');
             await viewedJobTitles.insertOne({
               title: jobTitle,
               site: site.url,
