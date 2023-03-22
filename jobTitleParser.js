@@ -29,16 +29,22 @@ const getJobTitlesByFakeBrowser = async (site) => {
 }
 
 const getJobTitlesByAxios = async (site) => {
-  const response = await axios.get(site.url, { headers: { 'User-Agent': faker.internet.userAgent() }  });
-  const html = response.data;
-  const $ = await cheerio.load(html);
+  try{
+    const response = await axios.get(site.url, { headers: { 'User-Agent': faker.internet.userAgent() }  });
+    const html = response.data;
+    const $ = await cheerio.load(html);
 
-  let jobTitles = [];
-  const jobTitlesElements = await $(site.jobTitleSelector);
-  for (let i = 0; i < jobTitlesElements.length; i++) {
-    jobTitles[i] = $(jobTitlesElements[i]).text();
+    let jobTitles = [];
+    const jobTitlesElements = await $(site.jobTitleSelector);
+    for (let i = 0; i < jobTitlesElements.length; i++) {
+      jobTitles[i] = $(jobTitlesElements[i]).text();
+    }
+    return jobTitles;
   }
-  return jobTitles;
+  catch (error) {
+    console.error(`===============================Parsing ${site.name} returned ERROR:${error}===============================`);
+    return [];
+  }
 }
 
 export { getJobTitlesByFakeBrowser, getJobTitlesByAxios };
