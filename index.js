@@ -11,7 +11,7 @@ const init = async () => {
   return { config, jobSites };
 };
 
-const parseJobSites = async (config, jobSites) => {
+const parseJobSites = async (config, jobSites, telegramBot) => {
   const mongo = await MongoClient.connect(MONGODB_URI, {
     useNewUrlParser: true,
   });
@@ -78,7 +78,7 @@ const parseJobSites = async (config, jobSites) => {
   const telegramBot = new Telegraf(config.TELEGRAM.TOKEN);
   telegramBot.startPolling();
 
-  await parseJobSites(config, jobSites);
+  await parseJobSites(config, jobSites, telegramBot);
   setInterval(async () => {
     await parseJobSites(config, jobSites);
   }, config.SCAN_INTERVAL_MINUTES * 60 * 1000);
