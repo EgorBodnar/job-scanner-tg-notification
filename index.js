@@ -1,40 +1,41 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import { Telegraf } from 'telegraf';
 import { MongoClient } from 'mongodb';
-import { getJobTitlesByFakeBrowser, getJobTitlesByAxios }  from './jobTitleParser.js';
+import { getJobTitlesByFakeBrowser, getJobTitlesByAxios } from './jobTitleParser.js';
 
 const MONGODB_URI = 'mongodb://mongo:27017';
 
-const config = JSON.parse(fs.readFileSync('./config/default.json', 'utf8'));
-const jobSites = JSON.parse(fs.readFileSync('./config/jobSites.json', 'utf8'));
+const init = async () => {
+  const config = JSON.parse(await fs.readFile('./config/default.json', 'utf8'));
+  const jobSites = JSON.parse(await fs.readFile('./config/jobSites.json', 'utf8'));
+  return { config, jobSites };
+};
 
-const telegramBot = new Telegraf(config.TELEGRAM.TOKEN);
-
-const parseJobSites = async () => {
+const parseJobSites = async (config, jobSites) => {
   const mongo = await MongoClient.connect(MONGODB_URI, {
     useNewUrlParser: true,
   });
   const db = mongo.db('jobnotifications');
   const viewedJobTitles = db.collection('viewedJobTitles');
 
-  for (const site of jobSites) {
+  for await (const site of jobSites) {
     try {
       let jobTitles = [];
-      if ( site.antiBotCheck ) {
-        jobTitles = await getJobTitlesByFakeBrowser(site)
+      if (site.antiBotCheck) {
+        jobTitles = await getJobTitlesByFakeBrowser(site);
       } else {
-        jobTitles = await getJobTitlesByAxios(site)
+        jobTitles = await getJobTitlesByAxios(site);
       }
 
       console.info(`Parsing ${site.name}'s job list`);
-      if (jobTitles.length == 0) {
+      if (jobTitles.length === 0) {
         console.info(`          ===============================`);
         console.info(`          ${site.name} has no job title`);
         console.info(`          ===============================`);
       }
 
       for (let i = 0; i < jobTitles.length; i++) {
-        const jobTitle = jobTitles[i].toLowerCase().trim()
+        const jobTitle = jobTitles[i].toLowerCase().trim();
 
         const isMatchingJob = config.JOB_KEYWORDS.some((keyword) =>
           jobTitle.includes(keyword)
@@ -61,14 +62,24 @@ const parseJobSites = async () => {
       }
     } catch (error) {
       console.error(error);
+      continue;
     }
   }
-}
+  await mongo.close();
+
+  // Trigger garbage collection
+  if (global.gc) {
+    global.gc();
+  }
+};
 
 (async () => {
+  const { config, jobSites } = await init();
+  const telegramBot = new Telegraf(config.TELEGRAM.TOKEN);
   telegramBot.startPolling();
-  await parseJobSites();
+
+  await parseJobSites(config, jobSites);
   setInterval(async () => {
-    await parseJobSites();
+    await parseJobSites(config, jobSites);
   }, config.SCAN_INTERVAL_MINUTES * 60 * 1000);
 })();

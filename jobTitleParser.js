@@ -21,11 +21,10 @@ const getJobTitlesByFakeBrowser = async (site) => {
     await page.waitForSelector(site.jobTitleSelector);
     jobTitles = await page.$$eval(site.jobTitleSelector,
       elements=> elements.map(item=>item.textContent))
+    await fakeBrowser.shutdown();
   }   catch (error) {
     console.error(`===============================Parsing ${site.name} returned ERROR:${error}===============================`);
     return [];
-  } finally {
-    await fakeBrowser.shutdown();
   }
   return jobTitles
 }
