@@ -48,7 +48,7 @@ const parseJobSites = async (config, jobSites, telegramBot) => {
             site: site.url,
           });
           if (!isViewedJob) {
-            const message = `      🚀🚀🚀New ${jobTitle.toUpperCase()} job found on ${site.name}: ${site.url}🚀🚀🚀`;
+            const message = `      🚀🚀🚀New ${jobTitle.toUpperCase()} job found on ${site.name}: ${site.url}`;
             console.info(message);
             console.info('                    Sending data to Telegram chanel');
             await telegramBot.telegram.sendMessage(config.TELEGRAM.CHAT_ID, message);
