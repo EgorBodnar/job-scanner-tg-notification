@@ -6,4 +6,6 @@ COPY . .
 
 RUN npm install
 
-CMD [ "node", "index.js" ]
+ENTRYPOINT ["npm", "run"]
+
+CMD [ "pm2:bot:start" ]
