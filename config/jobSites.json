@@ -1,0 +1,7 @@
+[
+  {
+    "name":"Job portal aggregator or some interesting company's job list",
+    "url":"https://great-company.com/careers",
+    "jobTitleSelector":".job-info > h3"
+  }
+]
