@@ -3,5 +3,11 @@
     "name":"Job portal aggregator or some interesting company's job list",
     "url":"https://great-company.com/careers",
     "jobTitleSelector":".job-info > h3"
+  },
+  {
+    "name":"Job portal aggregator or some interesting company's job list with ANTIBOT CHECK",
+    "url":"https://another-great-company.com/career",
+    "jobTitleSelector":"h5[data-ui ='job-title'] > a",
+    "antiBotCheck": true
   }
 ]
