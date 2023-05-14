@@ -56,6 +56,7 @@ const parseJobSites = async (config, jobSites, telegramBot) => {
             await viewedJobTitlesCollection.insertOne({
               title: jobTitle,
               site: site.url,
+              date: new Date(),
             });
           }
         }
