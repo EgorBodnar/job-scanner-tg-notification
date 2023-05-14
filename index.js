@@ -16,7 +16,7 @@ const parseJobSites = async (config, jobSites, telegramBot) => {
     useNewUrlParser: true,
   });
   const db = mongo.db('jobnotifications');
-  const viewedJobTitles = db.collection('viewedJobTitles');
+  const viewedJobTitlesCollection = db.collection('viewedJobTitles');
 
   for await (const site of jobSites) {
     try {
@@ -43,7 +43,7 @@ const parseJobSites = async (config, jobSites, telegramBot) => {
 
         if (isMatchingJob) {
           console.info('          * Check if the job title has already been viewed');
-          const isViewedJob = await viewedJobTitles.findOne({
+          const isViewedJob = await viewedJobTitlesCollection.findOne({
             title: jobTitle,
             site: site.url,
           });
@@ -53,7 +53,7 @@ const parseJobSites = async (config, jobSites, telegramBot) => {
             console.info('                    Sending data to Telegram chanel');
             await telegramBot.telegram.sendMessage(config.TELEGRAM.CHAT_ID, message);
             console.info('                    Insert data to DB as viewed job title');
-            await viewedJobTitles.insertOne({
+            await viewedJobTitlesCollection.insertOne({
               title: jobTitle,
               site: site.url,
             });
