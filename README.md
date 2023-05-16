@@ -11,6 +11,13 @@
 ## 📜 Description: 
 #### The scanner has a `MongoDB` based storage for previously viewed job posts to prevent duplicate notifications. It will only send notifications for *new job postings*.
 
+#### <p style="text-align: center;">Technologies and Libraries Used</p>
+
+| Telegram integration                   | Viewed job posts storage            | Bot HTTP client                  | Parsing HTML                       | Browser with user context, in case of anti-bot system | Control the browser and parse, in case of anti-bot system | Containerization & Orchestration                   |
+|----------------------------------------|-------------------------------------|----------------------------------|------------------------------------|-------------------------------------------------------|-----------------------------------------------------------|----------------------------------------------------|
+| [telegraf](https://telegraf.js.org/#/) | [mongodb](https://www.mongodb.com/) | [axios](https://axios-http.com/) | [cheerio](https://cheerio.js.org/) | [fakebrowser](https://www.fakebrowser.com/)           | [puppeteer](https://pptr.dev/)                            | [docker-compose](https://docs.docker.com/compose/) |
+
+
 <a name="dependencies"></a>
 ## 🧰 Required settings and dependencies:
 * Install the [**Docker Compose**](https://docs.docker.com/compose/gettingstarted) 
